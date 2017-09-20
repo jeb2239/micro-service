@@ -39,18 +39,10 @@ void MicroserviceController::initRestOpHandlers() {
 }
 
 void MicroserviceController::handleGet(http_request message) {
-    auto path = requestPath(message);
-    if (!path.empty()) {
-        if (path[0] == "service" && path[1] == "test") {
-            auto response = json::value::object();
-            response["version"] = json::value::string("0.1.1");
-            response["status"] = json::value::string("ready!");
-            message.reply(status_codes::OK, response);
-        }
-    }
-    else {
-        message.reply(status_codes::NotFound);
-    }
+    std::cout<<"Hello"<<std::endl;
+    message.set_body("Hello!");
+    message.reply(status_codes::OK,"Hello").wait();
+
 }
 
 void MicroserviceController::handlePatch(http_request message) {

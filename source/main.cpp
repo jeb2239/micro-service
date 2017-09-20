@@ -23,7 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-
+#if 1
 #include <iostream>
 
 #include <usr_interrupt_handler.hpp>
@@ -38,7 +38,7 @@ int main(int argc, const char * argv[]) {
     InterruptHandler::hookSIGINT();
 
     MicroserviceController server;
-    server.setEndpoint("http://host_auto_ip4:6502/v1/ivmero/api");
+    server.setEndpoint("http://localhost:3456/restdemo");
     
     try {
         // wait for server initialization...
@@ -58,3 +58,69 @@ int main(int argc, const char * argv[]) {
 
     return 0;
 }
+#endif
+
+#if 0
+#include <string>
+#include <cpprest/http_listener.h>
+#include <cpprest/json.h>
+#include <pplx/pplxtasks.h>
+ 
+using namespace web;
+using namespace http;
+using namespace http::experimental::listener;
+
+#include <iostream>
+#include <map>
+#include <set>
+#include <string>
+using namespace std;
+ 
+#define TRACE(msg)            cerr << msg
+#define TRACE_ACTION(a, k, v) cerr << a << L" (" << k << L", " << v << L")\n"
+ 
+map<utility::string_t, utility::string_t> dictionary;
+ 
+/* handlers implementation */
+void handle_get(http::http_request request)
+{
+cout<<"hello"<<endl;
+    
+   web::json::value answer;
+ 
+   for(auto const & p : dictionary)
+   {
+      answer[p.first]=json::value(p.second);
+   }
+ 
+   request.reply(status_codes::OK, answer);
+}
+
+int main()
+{
+   http_listener listener(uri("http://localhost:3456/restdemo"));
+ 
+   listener.support(http::methods::GET, handle_get);
+//    listener.support(methods::POST, handle_post);
+//    listener.support(methods::PUT, handle_put);
+//    listener.support(methods::DEL, handle_del);
+ 
+   try
+   {
+      listener
+         .open()
+         .then([&listener](){
+             cout<<"Starting To Listen"<<endl;
+         })
+         .wait();
+ 
+      while (true);
+   }
+   catch (exception const & e)
+   {
+      wcout << e.what() << endl;
+   }
+ 
+   return 0;
+}
+#endif

@@ -40,12 +40,7 @@ namespace cfx {
         uri_builder endpointBuilder;
 
         endpointBuilder.set_scheme(endpointURI.scheme());
-        if (endpointURI.host() == "host_auto_ip4") {
-            endpointBuilder.set_host(NetworkUtils::hostIP4());        
-        }
-        else if (endpointURI.host() == "host_auto_ip6") {
-            endpointBuilder.set_host(NetworkUtils::hostIP6());
-        }
+        endpointBuilder.set_host(endpointURI.host());
         endpointBuilder.set_port(endpointURI.port());
         endpointBuilder.set_path(endpointURI.path());
 
